@@ -103,10 +103,11 @@ export const authOptions = {
     async redirect({ url, baseUrl }) {
       console.log('NextAuth 리다이렉션 콜백:', { url, baseUrl });
       
-      // 단순화된 리다이렉션 규칙:
-      // 1. 외부 URL은 허용하지 않음
-      // 2. 내부 URL은 그대로 사용
-      // 3. 루트 URL은 그대로 사용 (후에 클라이언트에서 처리)
+      // 로그인 성공 후 항상 메인 페이지로 리디렉션
+      if (url.includes('/auth/') || url === baseUrl || url.endsWith('/')) {
+        console.log('-> 로그인 성공, 메인 페이지로 리다이렉션:', baseUrl);
+        return baseUrl;
+      }
       
       // 외부 URL인 경우 홈으로 리다이렉션
       if (!url.startsWith(baseUrl)) {

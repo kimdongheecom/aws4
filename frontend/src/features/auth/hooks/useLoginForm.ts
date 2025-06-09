@@ -67,17 +67,21 @@ export const useLoginForm = () => {
         // 로그인 성공 시 상태 업데이트
         setFormState(prev => ({
           ...prev,
-          success: '로그인에 성공했습니다.',
+          success: '로그인에 성공했습니다. 메인 페이지로 이동합니다.',
           isLoading: false
         }));
         
         // 사용자 ID 설정 (zustand 스토어 활용)
         setUserId(formState.id);
         
-        // NextAuth가 자동으로 세션을 설정하므로, 추가 처리 없이 홈으로 이동
-        // useAuthRedirect 훅이 역할에 맞는 페이지로 리다이렉션
-        console.log('NextAuth 로그인 성공: 홈으로 이동');
-        router.push('/');
+        // 로그인 성공 후 메인 페이지로 강제 이동
+        console.log('NextAuth 로그인 성공: 메인 페이지로 이동');
+        
+        // 약간의 지연 후 메인 페이지로 이동 (성공 메시지를 보여주기 위해)
+        setTimeout(() => {
+          router.push('/');
+          router.refresh(); // 페이지 새로고침으로 확실한 이동
+        }, 1000);
       }
     } catch (error) {
       console.error('로그인 오류:', error);

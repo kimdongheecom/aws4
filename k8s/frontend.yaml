@@ -13,10 +13,12 @@ spec:
     metadata:
       labels:
         app: frontend
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2025-06-09T18:08:35+09:00"
     spec:
       containers:
       - name: frontend
-        image: frontend:v2
+        image: frontend:v4
         ports:
         - containerPort: 3000
         env:
@@ -25,20 +27,33 @@ spec:
         - name: NEXT_TELEMETRY_DISABLED
           value: "1"
         - name: NEXT_PUBLIC_API_URL
-          value: "http://gateway:8080"
+          value: "http://localhost:8080"
         - name: NEXTAUTH_URL
           value: "http://localhost:8080"
         - name: NEXTAUTH_SECRET
-          value: "your-super-secret-key-for-development"
+          valueFrom:
+            secretKeyRef:
+              name: frontend-secrets
+              key: nextauth-secret
         - name: USE_MOCK_API
           value: "true"
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: frontend-secrets
+              key: google-client-id
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: frontend-secrets
+              key: google-client-secret
         resources:
           requests:
-            memory: "512Mi"
+            memory: "1Gi"
             cpu: "250m"
           limits:
-            memory: "1Gi"
-            cpu: "500m"
+            memory: "2Gi"
+            cpu: "1000m"
 ---
 apiVersion: v1
 kind: Service
@@ -50,7 +65,7 @@ spec:
   selector:
     app: frontend
   ports:
-  - port: 3000
+  - protocol: TCP
+    port: 3000
     targetPort: 3000
-    protocol: TCP
-  type: ClusterIP
+  type: ClusterIP 

@@ -15,4 +15,9 @@ frontend/.env.development.local
 frontend/.env.test.local
 frontend/.env.production.local
 
+# Kubernetes secrets (민감한 정보 포함)
+k8s/*-secret.yaml
+k8s/secrets/
+*.secret.yaml
+
 

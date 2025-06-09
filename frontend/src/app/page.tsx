@@ -12,18 +12,19 @@ import { useEffect } from "react";
 export default function Home() {
   // alert 창이 들어갈 공간간
   useEffect(() => {
-    const currentTime = new Date();
-    const formattedTime = currentTime.toLocaleString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
+    // const currentTime = new Date();
+    // const formattedTime = currentTime.toLocaleString('ko-KR', {
+    //   year: 'numeric',
+    //   month: '2-digit',
+    //   day: '2-digit',
+    //   hour: '2-digit',
+    //   minute: '2-digit',
+    //   second: '2-digit',
+    //   hour12: false
+    // });
     
-    alert(`페이지가 로드되었습니다!\n현재 시간: ${formattedTime}`);
+    // alert(`페이지가 로드되었습니다!\n현재 시간: ${formattedTime}`);
+    console.log('메인 페이지가 로드되었습니다.');
   }, []);
 
   return (
@@ -34,6 +35,16 @@ export default function Home() {
       <div className="absolute top-1/2 left-5 w-24 h-24 bg-indigo-200 rounded-full opacity-25"></div>
       
       <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen relative">
+        {/* 로그인 버튼 - 상단 우측 */}
+        <Link href="/login" className="absolute top-4 right-4 z-20">
+          <button className="bg-white hover:bg-blue-50 text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:scale-105">
+            <div className="flex items-center space-x-2">
+              <span>🔐</span>
+              <span>로그인</span>
+            </div>
+          </button>
+        </Link>
+
         {/* 메인 컨테이너 */}
         <div className="relative w-full max-w-6xl">
           
