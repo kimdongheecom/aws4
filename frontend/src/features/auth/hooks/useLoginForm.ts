@@ -79,7 +79,7 @@ export const useLoginForm = () => {
         
         // 약간의 지연 후 메인 페이지로 이동 (성공 메시지를 보여주기 위해)
         setTimeout(() => {
-          router.push('/');
+        router.push('/');
           router.refresh(); // 페이지 새로고침으로 확실한 이동
         }, 1000);
       }

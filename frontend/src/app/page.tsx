@@ -3,6 +3,7 @@
 // import { Metadata } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 // export const metadata: Metadata = {
 //   title: "Kim Donghee",
@@ -10,6 +11,8 @@ import { useEffect } from "react";
 // };
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
   // alert 창이 들어갈 공간간
   useEffect(() => {
     // const currentTime = new Date();
@@ -27,6 +30,13 @@ export default function Home() {
     console.log('메인 페이지가 로드되었습니다.');
   }, []);
 
+  const handleLogout = async () => {
+    await signOut({ 
+      callbackUrl: '/',
+      redirect: true 
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-50 to-indigo-100 relative overflow-hidden">
       {/* 배경 장식 원들 */}
@@ -35,15 +45,44 @@ export default function Home() {
       <div className="absolute top-1/2 left-5 w-24 h-24 bg-indigo-200 rounded-full opacity-25"></div>
       
       <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen relative">
-        {/* 로그인 버튼 - 상단 우측 */}
-        <Link href="/auth/login" className="absolute top-4 right-4 z-20">
-          <button className="bg-white hover:bg-blue-50 text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:scale-105">
-            <div className="flex items-center space-x-2">
-              <span>🔐</span>
-              <span>로그인</span>
+        {/* 로그인/로그아웃 버튼 - 상단 우측 */}
+        <div className="absolute top-4 right-4 z-20">
+          {status === "loading" ? (
+            <div className="bg-gray-200 animate-pulse py-2 px-6 rounded-full">
+              <span className="text-gray-400">로딩중...</span>
             </div>
-          </button>
-        </Link>
+          ) : session ? (
+            <div className="flex items-center space-x-4">
+              {/* 사용자 정보 표시 */}
+              <div className="bg-white text-blue-600 font-medium py-2 px-4 rounded-full shadow-lg border-2 border-blue-200">
+                <span>안녕하세요, {session.user?.name || session.user?.email || '사용자'}님</span>
+              </div>
+              {/* 로그아웃 버튼 */}
+              <button 
+                onClick={handleLogout}
+                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-red-400 hover:border-red-500 transition-all duration-300 hover:scale-105"
+                data-testid="logout-button"
+              >
+                <div className="flex items-center space-x-2">
+                  <span>🚪</span>
+                  <span>로그아웃</span>
+                </div>
+              </button>
+            </div>
+          ) : (
+            <Link href="/auth/login">
+              <button 
+                className="bg-white hover:bg-blue-50 text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:scale-105"
+                data-testid="login-button"
+              >
+                <div className="flex items-center space-x-2">
+                  <span>🔐</span>
+                  <span>로그인</span>
+                </div>
+              </button>
+            </Link>
+          )}
+        </div>
 
         {/* 메인 컨테이너 */}
         <div className="relative w-full max-w-6xl">
