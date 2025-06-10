@@ -111,6 +111,22 @@ services:
     networks:
       - lif-network
 
+  n8n-service:
+    build: ./n8n-service
+    ports:
+      - "8009:8009"
+    volumes:
+      - ./n8n-service/app:/app/app
+      - ./n8n-service/requirements.txt:/app/requirements.txt
+    env_file:
+      - ./n8n-service/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SERVICE_NAME=n8n-service
+    restart: always
+    networks:
+      - lif-network
+
   postgres:
     image: postgres:15
     container_name: postgres
