@@ -36,7 +36,7 @@ export default function Home() {
       
       <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen relative">
         {/* 로그인 버튼 - 상단 우측 */}
-        <Link href="/login" className="absolute top-4 right-4 z-20">
+        <Link href="/auth/login" className="absolute top-4 right-4 z-20">
           <button className="bg-white hover:bg-blue-50 text-blue-600 font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-blue-200 hover:border-blue-300 transition-all duration-300 hover:scale-105">
             <div className="flex items-center space-x-2">
               <span>🔐</span>

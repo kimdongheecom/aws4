@@ -1,23 +1,39 @@
 "use client";
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useLoginForm } from '@/features/auth/hooks/useLoginForm';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { setAccessToken } from '@/lib/api/authToken';
 import { useUserStore } from '@/store/userStore';
 
 const LoginForm = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const {
     formState,
     handleChange,
     handleLogin
   } = useLoginForm();
   
-  // 필요하지 않다면 제거
-  // const setUserId = useUserStore(state => state.setUserId);
+  // OAuth 로그인 성공 감지 및 자동 리디렉션
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      console.log('OAuth 로그인 성공 감지:', {
+        email: session.user.email,
+        name: session.user.name,
+        status
+      });
+      
+      // 성공 메시지 표시 후 메인 페이지로 리디렉션
+      setTimeout(() => {
+        console.log('메인 페이지로 자동 리디렉션');
+        router.push('/');
+        router.refresh();
+      }, 1000);
+    }
+  }, [status, session, router]);
 
   // useCallback으로 소셜 로그인 핸들러 메모이제이션
   const handleGoogleSignIn = useCallback(async () => {
@@ -36,6 +52,28 @@ const LoginForm = () => {
       callbackUrl: '/' 
     });
   }, []);
+
+  // 로딩 상태 표시
+  if (status === 'loading') {
+    return (
+      <div className="text-center py-8">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <p className="mt-2 text-gray-600">로그인 상태 확인 중...</p>
+      </div>
+    );
+  }
+
+  // 이미 로그인된 상태
+  if (status === 'authenticated') {
+    return (
+      <div className="text-center py-8">
+        <div className="mb-4 rounded-md bg-green-50 p-4 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+          로그인에 성공했습니다! 잠시 후 메인 페이지로 이동합니다.
+        </div>
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   return (
     <>
