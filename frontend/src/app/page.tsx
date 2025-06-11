@@ -60,7 +60,7 @@ export default function Home() {
               {/* 로그아웃 버튼 */}
               <button 
                 onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-red-400 hover:border-red-500 transition-all duration-300 hover:scale-105"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full shadow-lg border-2 border-blue-500 hover:border-blue-600 transition-all duration-300 hover:scale-105"
                 data-testid="logout-button"
               >
                 <div className="flex items-center space-x-2">

@@ -46,10 +46,10 @@ const processQueue = (error: any, token: string | null = null) => {
 
 // API 기본 URL 설정 - Gateway 서비스로 연결
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL || (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000');
 
 // Axios 인스턴스 생성
 export const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -60,6 +60,13 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async (config) => {
     const session = await getSession();
+    
+    // URL 결정: /api/로 시작하면 프론트엔드 직접 호출, 아니면 Gateway 통해 호출
+    if (config.url?.startsWith('/api/')) {
+      config.baseURL = FRONTEND_URL;
+    } else {
+      config.baseURL = API_BASE_URL;
+    }
     
     // 인증 토큰이 있는 경우 요청 헤더에 추가
     if (session?.accessToken && config.headers) {

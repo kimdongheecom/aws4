@@ -11,7 +11,8 @@ export default function ConditionalSidebar() {
                            pathname === '/contact' ||
                            pathname === '/stock-price' ||
                            pathname === '/watchdog' ||
-                           pathname === '/thesis';
+                           pathname === '/thesis' ||
+                           pathname === '/profile';
   
   if (shouldHideSidebar) {
     return null;
