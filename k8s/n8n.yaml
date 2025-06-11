@@ -30,9 +30,10 @@ spec:
         - name: N8N_PROTOCOL
           value: "http"
         - name: WEBHOOK_URL
-          value: "http://n8n.localhost:8080"
+          value: "http://localhost:8080/n8n"
+        - name: N8N_PATH
+          value: "/n8n"
         - name: GENERIC_TIMEZONE
-          value: "Asia/Seoul"
         - name: TZ
           value: "Asia/Seoul"
         - name: NODE_ENV
